@@ -1,0 +1,32 @@
+Requirments:
+
+Tested using Ubuntu 11.10
+
+Hardware:
+Asus Xtion Pro Live
+
+External Libraries:
+---------------------
+OpenNI:
+sudo apt-get install libusb-dev
+install the OpenNI module first, followed by Sensor then NITE all using the install.sh scripts)
+
+opencv 2.3.1
+
+PCL (pointclouds.org)
+
+Nestk (http://nicolas.burrus.name/index.php/Research/KinectUseNestk)
+Simply place as a subdirectory after downloading from the authors git repo (https://github.com/nburrus/nestk)
+
+Other dependencies:
+sudo ap-get install libboost-program-options1.46-dev
+
+Building
+-----------
+mkdir build
+cd build
+cmake ..
+make
+
+
+

@@ -1,0 +1,8 @@
+ function buildFullFloorMasks( dirIn )
+    imgFiles = dir( strcat(dirIn, '/', '*.png'  ) );
+    labelFiles = dir( strcat(dirIn, '/', '*.txt'  ) );
+    
+    for i = 1:len(dirIn),
+        inImg = imread( strcat(dirIn,'/',imgFiles(i).name) );
+        inLabels = load( strcat(dirIn,'/',labelFiles(i).name) );
+        save('filename',singleSegRun( inImg, inLabels ));
