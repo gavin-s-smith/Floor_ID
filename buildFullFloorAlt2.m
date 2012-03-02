@@ -19,12 +19,27 @@ maxDepth = 1000;
 
 % Load the list of files that will be evaluated.  Store in variable
 % moveList
-gtFiles = dir( strcat(dirGT, '/', '*.bmp'  ) );
-moveList = zeros(length(gtFiles));
-for idx49 = 1:length(gtFiles),
-    filebase = gtFiles(idx49).name(1:(length(gtFiles(idx49).name)-6));
-    moveList(idx49) = str2double(filebase);
+if strcmp(dirGT,'none'),
+    % process all if none is specified (in the case we do not care about
+    % evaluation
+    
+    gtFiles = dir( strcat(dirIn, '/', '*.png'));
+    moveList = zeros(length(gtFiles));
+    for idx49 = 1:length(gtFiles),
+        filebase = gtFiles(idx49).name(1:(length(gtFiles(idx49).name)-4));
+        moveList(idx49) = str2double(filebase);
+    end
+    
+else
+    gtFiles = dir( strcat(dirGT, '/', '*.bmp'  ) );
+    moveList = zeros(length(gtFiles));
+    for idx49 = 1:length(gtFiles),
+        filebase = gtFiles(idx49).name(1:(length(gtFiles(idx49).name)-6));
+        moveList(idx49) = str2double(filebase);
+    end
 end
+
+
 
 
 % Load the image sequence and sort correctly.
@@ -95,55 +110,56 @@ for idx49 = 1:length(moveList),
     moreImagesInv = {};
     moreImageMasksInv = {};
 
-    % If we need to add a whole lot of images to t
-    if usePostCapturedImages == 1,
-        maxIdx = numIntoFutureOrPast;
-
-        for idxAt = 1:maxIdx,
-           % numbase = str2double(filebase);
-            if intoFuture == 1,
-                %numbase = moves(str2double( ( find(filebaseList == str2double(filebase)) + (idxAt*skipMultiplier) )) );
-                 numbase = filebaseList( ( find(filebaseList == str2double(filebase)) + (idxAt*skipMultiplier) ) );
-            else
-              tIdx = find(filebaseList == str2double(filebase)) - (idxAt*skipMultiplier);  
-
-              %tIdx = str2double(filebase) - (idxAt*skipMultiplier);
-              if tIdx <=0,
-                  numbase = tIdx;
-              else
-                numbase =  filebaseList( tIdx );
-              end
-            end
-
-            if numbase >0 && length(dir(strcat(dirIn,'/',num2str(numbase),'.png') ) ) == 1,
-                filebaseNext = num2str(numbase);
-                inImgNext = customImRead( strcat(dirIn,'/',filebaseNext,'.png') );
-                %inLabelsNext = customLoad( strcat(dirIn,'/',filebaseNext,'.flr') );
-                inLabelsNext = buildAndLoadSingleFloorFrame( dirIn, dataDir, filebaseNext, maxDepth, reprocess,restrictNumPoints, keepCtBasedOnFloorPts,keepMaxNPts  );
-
-                if length(inLabelsNext) ~= 1,
-                    strcat(dirIn,'/',filebaseNext,'.van');
-                    vanFileNext = textscan(fopen( strcat(dirIn,'/',filebaseNext,'.van') ), '%s');
-                    vpRowNext = round( str2double(cell2mat( vanFileNext{1}(24))) );
-                    inLabelsNext(1:vpRowNext,:) = -1;
-
-                    if sum(size(inImgNext) == [480 640 3]) ~= 3 || sum(size(inLabelsNext) == [480 640]) ~= 2,
-                        fprintf( '\nSkipped file (bad image or mask size): %s', strcat(filebaseNext,'.flr/png') );
-                    else
-                        moreImages{end+1} = inImgNext;
-                        moreImageMasks{end+1} = inLabelsNext;
-                        moreImageMasksInv{end+1} = inLabelsNext;
-                        [ angleInDegs invarientImg ] = removeShadows(inImg,inLabels ,angleInDegs);
-                        moreImagesInv{end+1} = invarientImg;
-                    end
-                else 
-                     fprintf( '\nSkipped file (could not find floor): %s', strcat(filebaseNext,'.flr/png') );
-                end
-            else
-                fprintf('\nSkipped file (did not exist): %s\n', num2str(numbase, '%4.4i'));
-            end
-        end
-    end
+    % This extention was not used in the paper
+%     % If we need to add a whole lot of images to t
+%     if usePostCapturedImages == 1,
+%         maxIdx = numIntoFutureOrPast;
+% 
+%         for idxAt = 1:maxIdx,
+%            % numbase = str2double(filebase);
+%             if intoFuture == 1,
+%                 %numbase = moves(str2double( ( find(filebaseList == str2double(filebase)) + (idxAt*skipMultiplier) )) );
+%                  numbase = filebaseList( ( find(filebaseList == str2double(filebase)) + (idxAt*skipMultiplier) ) );
+%             else
+%               tIdx = find(filebaseList == str2double(filebase)) - (idxAt*skipMultiplier);  
+% 
+%               %tIdx = str2double(filebase) - (idxAt*skipMultiplier);
+%               if tIdx <=0,
+%                   numbase = tIdx;
+%               else
+%                 numbase =  filebaseList( tIdx );
+%               end
+%             end
+% 
+%             if numbase >0 && length(dir(strcat(dirIn,'/',num2str(numbase),'.png') ) ) == 1,
+%                 filebaseNext = num2str(numbase);
+%                 inImgNext = customImRead( strcat(dirIn,'/',filebaseNext,'.png') );
+%                 %inLabelsNext = customLoad( strcat(dirIn,'/',filebaseNext,'.flr') );
+%                 inLabelsNext = buildAndLoadSingleFloorFrame( dirIn, dataDir, filebaseNext, maxDepth, reprocess,restrictNumPoints, keepCtBasedOnFloorPts,keepMaxNPts  );
+% 
+%                 if length(inLabelsNext) ~= 1,
+%                     strcat(dirIn,'/',filebaseNext,'.van');
+%                     vanFileNext = textscan(fopen( strcat(dirIn,'/',filebaseNext,'.van') ), '%s');
+%                     vpRowNext = round( str2double(cell2mat( vanFileNext{1}(24))) );
+%                     inLabelsNext(1:vpRowNext,:) = -1;
+% 
+%                     if sum(size(inImgNext) == [480 640 3]) ~= 3 || sum(size(inLabelsNext) == [480 640]) ~= 2,
+%                         fprintf( '\nSkipped file (bad image or mask size): %s', strcat(filebaseNext,'.flr/png') );
+%                     else
+%                         moreImages{end+1} = inImgNext;
+%                         moreImageMasks{end+1} = inLabelsNext;
+%                         moreImageMasksInv{end+1} = inLabelsNext;
+%                         [ angleInDegs invarientImg ] = removeShadows(inImg,inLabels ,angleInDegs);
+%                         moreImagesInv{end+1} = invarientImg;
+%                     end
+%                 else 
+%                      fprintf( '\nSkipped file (could not find floor): %s', strcat(filebaseNext,'.flr/png') );
+%                 end
+%             else
+%                 fprintf('\nSkipped file (did not exist): %s\n', num2str(numbase, '%4.4i'));
+%             end
+%         end
+%     end
 
     % The filename to write the indentified floor to
     nameOut = strcat(dirIn,'/',filebase,'.flr', '.mat');

@@ -56,9 +56,12 @@ labelImgUse = labelImg(:);
   
   %labelImgUse = labelImgUse';
   %labelImgUse = labelImgUse(:,m)';
-  if size(segOpts.trainFeatures,2) <= (640*480),
-      fprintf('88888888888888888888888888  NOT ENOUGH IMAGES!!!!');
-  end
+  
+  % NOT USED IN THE PAPER
+  %if size(segOpts.trainFeatures,2) <= (640*480),
+  %    fprintf('Only one image worth of training features.  If using multiple features this is an error!!');
+  %end
+  
   %Done altering
   
  % fprintf('\nFeatures\n');

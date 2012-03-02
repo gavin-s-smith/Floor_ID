@@ -11,10 +11,13 @@
       %  v = v(1:475,:);
       %  labelImg = labelImg(1:475,:);
         
+      figure
+      imshow(inImg)
+      %figure
         overlay3(inImg,v, labelImg);
         figure
-        overlay(inImg,v);
-        figure
+       %overlay(inImg,v);
+       % figure
         overlay3(inImg,v,v);
         
       

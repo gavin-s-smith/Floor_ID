@@ -46,7 +46,7 @@ imageToSend = inImg;
 %imageToSend = applycform(imageToSend,C);
 
 % 13 Jan 2011
-imageToSend = illumInvColourSpace(imageToSend);
+%imageToSend = illumInvColourSpace(imageToSend);
 
 imageToSend = im2double(imageToSend); % Image must be of format double to process correctly
 
