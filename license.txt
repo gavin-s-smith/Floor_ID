@@ -1,0 +1,5 @@
+License
+-------
+All matlab code contributed by this author is released under the LGPL license in line with the associated cpp code (see the readme within the folder).  The exception is the Geodesic Star Convexity code which is licensed as per the original license contained within the gsc-1.2 folder.  Note this code has been modified somewhat from the original authors code. 
+
+The LGPL can be found at: http://www.gnu.org/licenses/lgpl.html

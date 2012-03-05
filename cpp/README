@@ -5,6 +5,8 @@ Tested using Ubuntu 11.10
 Hardware:
 Asus Xtion Pro Live
 
+Note: If you would like to use a MS Kinect then this *may* work out of the box.  If not (this *will* be the case if you are using the freenect driver) then please modify the code in the loadData(...) function in the file SingleFrameExtraction.cpp to use the correct load function from the nestk library.
+
 External Libraries:
 ---------------------
 OpenNI:
@@ -27,6 +29,12 @@ mkdir build
 cd build
 cmake ..
 make
+
+
+License
+---------
+All code is release under the same LGPL license as the nestk library. 
+http://www.gnu.org/licenses/lgpl.html
 
 
 
